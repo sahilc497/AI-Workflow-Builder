@@ -91,7 +91,7 @@ pip install -r requirements.txt
 ### Start the Application
 
 ```bash
-python backend/main.py
+uvicorn backend.main:app --reload
 ```
 
 ### Debug Execution
