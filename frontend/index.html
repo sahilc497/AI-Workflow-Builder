@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI.WORKFLOW | Architectural Intelligence</title>
-    <meta name="description" content="Design, compile, and execute DAG workflows with architectural multi-agent intelligence.">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="description"
+        content="Design, compile, and execute DAG workflows with architectural multi-agent intelligence.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
         :root {
@@ -18,7 +22,12 @@
             --border-light: #E5E5E5;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; border-radius: 0 !important; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border-radius: 0 !important;
+        }
 
         body {
             background-color: var(--background);
@@ -34,26 +43,75 @@
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             opacity: 0.04;
             pointer-events: none;
             z-index: 9999;
         }
 
-        .container { max-width: 1400px; margin: 0 auto; padding: 4rem 2rem; position: relative; z-index: 1; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
 
         /* Typography */
-        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; letter-spacing: -0.03em; }
-        
-        header { text-align: left; margin-bottom: 6rem; border-bottom: 12px solid var(--border); padding-bottom: 2rem; position: relative; }
-        header::after { content: "ARCHITECTURAL_CORE_V3"; position: absolute; bottom: -30px; left: 0; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #666; letter-spacing: 0.3rem; }
-        
-        h1 { font-size: clamp(4rem, 12vw, 11rem); text-transform: uppercase; margin-bottom: 1rem; }
-        header p { font-size: 1.5rem; color: var(--muted-foreground); max-width: 700px; font-style: italic; }
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
 
-        .editorial-rule { border-top: 4px solid var(--border); margin: 4rem 0; }
-        .editorial-rule.thick { border-top-width: 12px; }
+        header {
+            text-align: left;
+            margin-bottom: 6rem;
+            border-bottom: 12px solid var(--border);
+            padding-bottom: 2rem;
+            position: relative;
+        }
+
+        header::after {
+            content: "ARCHITECTURAL_CORE_V3";
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 0.3rem;
+        }
+
+        h1 {
+            font-size: clamp(4rem, 12vw, 11rem);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            color: var(--muted-foreground);
+            max-width: 700px;
+            font-style: italic;
+        }
+
+        .editorial-rule {
+            border-top: 4px solid var(--border);
+            margin: 4rem 0;
+        }
+
+        .editorial-rule.thick {
+            border-top-width: 12px;
+        }
 
         /* Dashboard Cards & Panels */
         .glass-panel {
@@ -74,7 +132,10 @@
             padding-bottom: 1.5rem;
         }
 
-        .dashboard-header h2 { font-size: 3rem; text-transform: uppercase; }
+        .dashboard-header h2 {
+            font-size: 3rem;
+            text-transform: uppercase;
+        }
 
         .live-badge {
             font-family: 'JetBrains Mono', monospace;
@@ -82,11 +143,31 @@
             letter-spacing: 0.2rem;
             border: 2px solid var(--border);
             padding: 0.75rem 1.5rem;
-            display: flex; align-items: center; gap: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .live-dot { width: 12px; height: 12px; background: var(--foreground); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--foreground);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
 
         .kpi-grid {
             display: grid;
@@ -100,7 +181,10 @@
             border-right: 4px solid var(--border);
             text-align: left;
         }
-        .kpi-card:last-child { border-right: none; }
+
+        .kpi-card:last-child {
+            border-right: none;
+        }
 
         .kpi-label {
             font-family: 'JetBrains Mono', monospace;
@@ -111,8 +195,19 @@
             margin-bottom: 1.5rem;
         }
 
-        .kpi-value { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1; }
-        .kpi-sub { font-size: 1rem; color: var(--muted-foreground); font-style: italic; }
+        .kpi-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .kpi-sub {
+            font-size: 1rem;
+            color: var(--muted-foreground);
+            font-style: italic;
+        }
 
         .chart-area {
             display: flex;
@@ -120,14 +215,30 @@
             gap: 6rem;
             padding: 4rem;
             border: 2px solid var(--border);
-            background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
         }
 
-        .donut-wrap { position: relative; width: 220px; height: 220px; border: 4px solid var(--border); background: #fff; }
-        
-        .donut-center .big { font-family: 'Playfair Display'; font-size: 3rem; font-weight: 700; }
-        .donut-center .small { font-family: 'JetBrains Mono'; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1rem; }
+        .donut-wrap {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border: 4px solid var(--border);
+            background: #fff;
+        }
+
+        .donut-center .big {
+            font-family: 'Playfair Display';
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .donut-center .small {
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
 
         /* Main Grid - Balanced columns */
         .main-grid {
@@ -138,17 +249,42 @@
         }
 
         @media (max-width: 1200px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-            .kpi-card:nth-child(2) { border-right: none; }
-            .kpi-card:nth-child(1), .kpi-card:nth-child(2) { border-bottom: 4px solid var(--border); }
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .kpi-card:nth-child(2) {
+                border-right: none;
+            }
+
+            .kpi-card:nth-child(1),
+            .kpi-card:nth-child(2) {
+                border-bottom: 4px solid var(--border);
+            }
         }
 
         /* Forms & Inputs */
-        .form-group { margin-bottom: 3rem; }
-        label { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.2rem; margin-bottom: 1.5rem; display: block; font-weight: 600; }
+        .form-group {
+            margin-bottom: 3rem;
+        }
 
-        textarea, .trigger-input, .trigger-select {
+        label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        textarea,
+        .trigger-input,
+        .trigger-select {
             width: 100%;
             background: #fff;
             border: 4px solid var(--border);
@@ -159,7 +295,9 @@
             transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        textarea:focus, .trigger-input:focus, .trigger-select:focus {
+        textarea:focus,
+        .trigger-input:focus,
+        .trigger-select:focus {
             outline: none;
             background: var(--muted);
             box-shadow: 10px 10px 0 #000;
@@ -179,20 +317,67 @@
             text-transform: uppercase;
             letter-spacing: 0.3rem;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
             transition: all 150ms;
         }
 
-        button:hover { background: #333; transform: translate(-4px, -4px); box-shadow: 8px 8px 0 #000; }
-        button:active { transform: translate(0, 0); box-shadow: 0 0 0 #000; }
-        button:disabled { background: #999; cursor: not-allowed; transform: none; box-shadow: none; }
+        button:hover {
+            background: #333;
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000;
+        }
 
-        .btn-ghost { background: transparent; color: var(--foreground); border: 4px solid var(--border); }
-        .btn-ghost:hover { background: var(--foreground); color: var(--background); }
-        
-        .btn-success { background: var(--foreground); border: 4px solid var(--border); position: relative; overflow: hidden; }
-        .btn-success::after { content: "AUTHORIZED"; position: absolute; top: -100%; left: 0; width: 100%; height: 100%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; transition: top 0.3s; }
-        .btn-success:hover::after { top: 0; }
+        button:active {
+            transform: translate(0, 0);
+            box-shadow: 0 0 0 #000;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--foreground);
+            border: 4px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--foreground);
+            color: var(--background);
+        }
+
+        .btn-success {
+            background: var(--foreground);
+            border: 4px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-success::after {
+            content: "AUTHORIZED";
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: top 0.3s;
+        }
+
+        .btn-success:hover::after {
+            top: 0;
+        }
 
         /* Workflow Items */
         .workflow-item {
@@ -200,11 +385,17 @@
             padding: 2.5rem;
             margin-bottom: 2rem;
             transition: all 150ms;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             overflow: hidden;
             background: #fff;
         }
-        .workflow-item:hover { transform: translate(-4px, -4px); box-shadow: 6px 6px 0 #000; }
+
+        .workflow-item:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 6px 6px 0 #000;
+        }
 
         /* Stable Result Area */
         #result-area {
@@ -212,52 +403,144 @@
             border: 8px solid var(--border);
             padding: 3rem;
             min-height: 400px;
-            display: block !important; 
+            display: block !important;
             opacity: 0.05;
             pointer-events: none;
             transition: opacity 0.5s ease;
             position: relative;
         }
-        #result-area.active { opacity: 1; pointer-events: auto; }
-        #result-area::before { content: "STATUS: IDLE"; position: absolute; top: 10px; right: 10px; font-family: 'JetBrains Mono'; font-size: 0.6rem; color: #999; }
-        #result-area.active::before { content: "STATUS: COMPILED"; color: #000; }
 
-        #workflow-network { background: #fff; border: 2px solid var(--border); }
+        #result-area.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #result-area::before {
+            content: "STATUS: IDLE";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'JetBrains Mono';
+            font-size: 0.6rem;
+            color: #999;
+        }
+
+        #result-area.active::before {
+            content: "STATUS: COMPILED";
+            color: #000;
+        }
+
+        #workflow-network {
+            background: #fff;
+            border: 2px solid var(--border);
+        }
 
         /* Voice Assistant Monochrome */
         .btn-mic {
             background: #fff;
             border: 4px solid var(--border);
             color: var(--foreground);
-            width: 60px; height: 60px;
+            width: 60px;
+            height: 60px;
             padding: 0;
         }
-        .btn-mic.listening { background: var(--foreground); color: var(--background); animation: breathe 1.5s infinite; }
-        @keyframes breathe { 0% { outline: 0px solid #000; } 50% { outline: 10px solid rgba(0,0,0,0.1); } 100% { outline: 0px solid #000; } }
-        
+
+        .btn-mic.listening {
+            background: var(--foreground);
+            color: var(--background);
+            animation: breathe 1.5s infinite;
+        }
+
+        @keyframes breathe {
+            0% {
+                outline: 0px solid #000;
+            }
+
+            50% {
+                outline: 10px solid rgba(0, 0, 0, 0.1);
+            }
+
+            100% {
+                outline: 0px solid #000;
+            }
+        }
+
         .voice-status-overlay {
-            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 10000;
-            background: #fff; border-top: 12px solid var(--border);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10000;
+            background: #fff;
+            border-top: 12px solid var(--border);
             padding: 5rem;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .voice-status-overlay.active { transform: translateY(0); }
-        .voice-bar { background: var(--foreground); width: 6px; height: 15px; margin: 0 4px; animation: voiceWave 1s infinite alternate; }
-        @keyframes voiceWave { from { height: 10px; } to { height: 50px; } }
+
+        .voice-status-overlay.active {
+            transform: translateY(0);
+        }
+
+        .voice-bar {
+            background: var(--foreground);
+            width: 6px;
+            height: 15px;
+            margin: 0 4px;
+            animation: voiceWave 1s infinite alternate;
+        }
+
+        @keyframes voiceWave {
+            from {
+                height: 10px;
+            }
+
+            to {
+                height: 50px;
+            }
+        }
 
         /* Triggers */
-        .trigger-card { border: 2px solid var(--border); padding: 2.5rem; margin-bottom: 2rem; background: #fff; }
-        
+        .trigger-card {
+            border: 2px solid var(--border);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            background: #fff;
+        }
+
         /* Modals */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
-            z-index: 11000; display: none; align-items: center; justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 11000;
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: #fff; border: 12px solid var(--border); padding: 6rem; max-width: 800px; width: 90%; box-shadow: 30px 30px 0 #000; }
-        .modal-title { font-size: 3.5rem; text-transform: uppercase; margin-bottom: 2rem; }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 12px solid var(--border);
+            padding: 6rem;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 30px 30px 0 #000;
+        }
+
+        .modal-title {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
 
         /* Pre/Code */
         pre {
@@ -270,322 +553,370 @@
             overflow-x: auto;
         }
 
-        .editorial-details summary { cursor: pointer; font-family: 'JetBrains Mono'; text-transform: uppercase; font-size: 0.8rem; padding: 1rem 0; list-style: none; }
-        .editorial-details summary::before { content: "[+] "; }
-        .editorial-details[open] summary::before { content: "[-] "; }
+        .editorial-details summary {
+            cursor: pointer;
+            font-family: 'JetBrains Mono';
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            padding: 1rem 0;
+            list-style: none;
+        }
+
+        .editorial-details summary::before {
+            content: "[+] ";
+        }
+
+        .editorial-details[open] summary::before {
+            content: "[-] ";
+        }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <header>
-        <h1>AI.WORKFLOW</h1>
-        <p>Design, compile, and execute DAG architectures with high-authority multi-agent intelligence logs.</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>AI.WORKFLOW</h1>
+            <p>Design, compile, and execute DAG architectures with high-authority multi-agent intelligence logs.</p>
+        </header>
 
-    <!-- ===== ANALYTICS PROTOCOL ===== -->
-    <div class="glass-panel" id="analytics-panel">
-        <div class="dashboard-header">
-            <h2>Live Protocol</h2>
-            <div class="live-badge">
-                <div class="live-dot"></div>
-                CORES_SYNCED
+        <!-- ===== ANALYTICS PROTOCOL ===== -->
+        <div class="glass-panel" id="analytics-panel">
+            <div class="dashboard-header">
+                <h2>Live Protocol</h2>
+                <div class="live-badge">
+                    <div class="live-dot"></div>
+                    CORES_SYNCED
+                </div>
             </div>
-        </div>
 
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-label">Volume</div>
-                <div class="kpi-value" id="kpi-total">00</div>
-                <div class="kpi-sub">Total Operations</div>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Volume</div>
+                    <div class="kpi-value" id="kpi-total">00</div>
+                    <div class="kpi-sub">Total Operations</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Success</div>
+                    <div class="kpi-value" id="kpi-success">0.0%</div>
+                    <div class="kpi-sub" id="kpi-success-count">0 Verified</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Latency</div>
+                    <div class="kpi-value" id="kpi-avg">0.0s</div>
+                    <div class="kpi-sub">Avg Duration</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Faults</div>
+                    <div class="kpi-value" id="kpi-failure">0%</div>
+                    <div class="kpi-sub" id="kpi-failure-count">0 Interrupts</div>
+                </div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Success</div>
-                <div class="kpi-value" id="kpi-success">0.0%</div>
-                <div class="kpi-sub" id="kpi-success-count">0 Verified</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Latency</div>
-                <div class="kpi-value" id="kpi-avg">0.0s</div>
-                <div class="kpi-sub">Avg Duration</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Faults</div>
-                <div class="kpi-value" id="kpi-failure">0%</div>
-                <div class="kpi-sub" id="kpi-failure-count">0 Interrupts</div>
-            </div>
-        </div>
 
-        <div class="chart-area">
-            <div class="donut-wrap">
-                <div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:2;">
-                    <div class="donut-center" style="text-align:center;">
-                        <div class="big" id="donut-center-val">0</div>
-                        <div class="small">CYCLES</div>
+            <div class="chart-area">
+                <div class="donut-wrap">
+                    <div
+                        style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:2;">
+                        <div class="donut-center" style="text-align:center;">
+                            <div class="big" id="donut-center-val">0</div>
+                            <div class="small">CYCLES</div>
+                        </div>
+                    </div>
+                    <svg width="220" height="220" viewBox="0 0 160 160" id="donut-svg">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#f5f5f5" stroke-width="20" />
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#000" stroke-width="20"
+                            stroke-dasharray="0 440" id="arc-success" stroke-linecap="butt"
+                            style="transition: stroke-dasharray 0.6s cubic-bezier(0.16, 1, 0.3, 1);" />
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#666" stroke-width="20"
+                            stroke-dasharray="0 440" id="arc-failure" stroke-linecap="butt"
+                            style="transition: stroke-dasharray 0.6s cubic-bezier(0.16, 1, 0.3, 1);" />
+                    </svg>
+                </div>
+
+                <div class="chart-legend" style="border-left: 4px solid #000; padding: 1rem 3rem;">
+                    <p
+                        style="font-family: 'JetBrains Mono'; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 2rem; letter-spacing: 0.2rem;">
+                        Telemetrics</p>
+                    <div style="display:grid; gap: 1.5rem;">
+                        <div><span style="font-weight: 700;">[ARCHIVED]:</span> <span id="leg-success">0</span></div>
+                        <div><span style="font-weight: 700;">[BREACHED]:</span> <span id="leg-failure">0</span></div>
+                        <div><span style="font-weight: 700;">[QUEUED]:</span> <span id="leg-pending">0</span></div>
                     </div>
                 </div>
-                <svg width="220" height="220" viewBox="0 0 160 160" id="donut-svg">
-                    <circle cx="80" cy="80" r="70" fill="none" stroke="#f5f5f5" stroke-width="20"/>
-                    <circle cx="80" cy="80" r="70" fill="none" stroke="#000" stroke-width="20"
-                        stroke-dasharray="0 440" id="arc-success" stroke-linecap="butt"
-                        style="transition: stroke-dasharray 0.6s cubic-bezier(0.16, 1, 0.3, 1);"/>
-                    <circle cx="80" cy="80" r="70" fill="none" stroke="#666" stroke-width="20"
-                        stroke-dasharray="0 440" id="arc-failure" stroke-linecap="butt"
-                        style="transition: stroke-dasharray 0.6s cubic-bezier(0.16, 1, 0.3, 1);"/>
-                </svg>
-            </div>
-
-            <div class="chart-legend" style="border-left: 4px solid #000; padding: 1rem 3rem;">
-                <p style="font-family: 'JetBrains Mono'; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 2rem; letter-spacing: 0.2rem;">Telemetrics</p>
-                <div style="display:grid; gap: 1.5rem;">
-                    <div><span style="font-weight: 700;">[ARCHIVED]:</span> <span id="leg-success">0</span></div>
-                    <div><span style="font-weight: 700;">[BREACHED]:</span> <span id="leg-failure">0</span></div>
-                    <div><span style="font-weight: 700;">[QUEUED]:</span> <span id="leg-pending">0</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="editorial-rule thick"></div>
-
-    <!-- ===== CORE ARCHITECTURE UI ===== -->
-    <div class="main-grid">
-        <!-- Module 01: Concept -->
-        <div>
-            <h2>01. Concept</h2>
-            <p style="margin-bottom:4rem; font-size: 1.25rem; font-style: italic;">Provide the natural language seed for your automation architecture.</p>
-
-            <div class="form-group">
-                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <label>Command Sequence</label>
-                    <button id="btn-voice" class="btn-mic" onclick="toggleVoice()" title="Vocal Input">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                            <line x1="12" y1="19" x2="12" y2="23"></line>
-                        </svg>
-                    </button>
-                </div>
-                <textarea id="prompt" placeholder="DESCRIBE_REQUIREMENT..." style="min-height: 300px;"></textarea>
-                <div style="font-family:'JetBrains Mono'; font-size: 0.7rem; margin-top: 1rem; color: #666;">ARCH_HINT: "SEARCH_WEB", "SEND_MAIL", "GUI_AUTOMATION"</div>
-            </div>
-
-            <button id="btn-generate" onclick="generateWorkflow()">
-                <span id="gen-text">Initialize Architecture</span>
-                <div id="gen-loader" style="display:none; width:20px; height:20px; border:3px solid #fff; border-top-color:transparent; border-radius:50%; animation: spin 0.8s linear infinite;"></div>
-            </button>
-            <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
-
-            <!-- Execution Blueprint (Stable Container) -->
-            <div id="result-area">
-                <div class="dashboard-header" style="margin-top: 0; margin-bottom: 3rem; border-bottom-width: 4px;">
-                    <h3>Execution Blueprint</h3>
-                </div>
-                <div id="workflow-network" style="width: 100%; height: 500px; margin-bottom: 3rem;"></div>
-                
-                <div id="explanation-panel" style="display:none; padding: 3rem; border: 2px solid #000; background: var(--muted); margin-bottom: 3rem;"></div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; margin-bottom: 3rem;">
-                    <button id="btn-explain" class="btn-ghost" onclick="toggleExplanation()" disabled>Review Reason</button>
-                    <button id="btn-execute-new" class="btn-success" onclick="executeWorkflow(window.currentWorkflowId)">Commit to Action</button>
-                </div>
-
-                <details class="editorial-details">
-                    <summary>Raw DAG Schema</summary>
-                    <pre id="dag-output"></pre>
-                </details>
             </div>
         </div>
 
-        <!-- Module 02: Archive -->
-        <div>
-            <h2>02. Archive</h2>
-            <p style="margin-bottom:4rem; font-size: 1.25rem; font-style: italic;">Persistent records of generated intelligence logs.</p>
+        <div class="editorial-rule thick"></div>
 
-            <div id="workflows-area" style="border-top: 4px solid #000; padding-top: 2rem;">
-                <p style="text-align:center; padding: 6rem; font-family: 'JetBrains Mono';">PENDING_RECORDS...</p>
-            </div>
-
-            <div id="execution-logs" style="display:none; margin-top:6rem;">
-                <h3 style="margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1rem;">Live Intelligence Log</h3>
-                <pre id="log-output" style="height: 400px; overflow-y: scroll;"></pre>
-                <button class="btn-ghost" style="margin-top:2rem;" onclick="refreshLogs()">Synchronize Logs</button>
-            </div>
-            
-            <div class="editorial-rule thick"></div>
-            
-            <h2>03. Protocol</h2>
-            <p style="margin-bottom:3rem; font-style: italic;">Governance for OS-level permissions.</p>
-            
-            <div id="allowed-apps-container" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-bottom:3rem;"></div>
-            
-            <div style="display:grid; grid-template-columns: 1fr auto; gap: 1.5rem;">
-                <input type="text" id="new-app-input" placeholder="EXECUTABLE_NAME.EXE" class="trigger-input">
-                <button onclick="addAllowedApp()" style="padding: 0 3rem; width: auto;">Add Protocol</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="editorial-rule thick"></div>
-
-    <!-- ===== MODULE 04: SENTINELS ===== -->
-    <div style="margin-top: 4rem;">
-        <div class="dashboard-header">
-            <h2>04. Sentinels</h2>
-            <div class="live-badge">
-                <div class="live-dot"></div>
-                OVERSIGHT_ACTIVE
-            </div>
-        </div>
-        <p style="margin-bottom:6rem; font-size: 1.5rem; font-style: italic;">Event-driven oversight protocols.</p>
-
-        <div class="main-grid" style="grid-template-columns: 1fr 1.5fr;">
-            <div class="glass-panel" style="box-shadow: none;">
-                <h3 style="text-transform: uppercase; margin-bottom: 3rem;">New Sentinel</h3>
-                <div class="form-group">
-                    <label>Origin</label>
-                    <select id="trigger-type-select" class="trigger-select" onchange="updateTriggerConfigUI()">
-                        <option value="">NODE_TYPE...</option>
-                        <option value="webhook">WEBHOOK_LINK</option>
-                        <option value="filesystem">PATH_OBSERVER</option>
-                        <option value="email">MAIL_WATCHER</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Target Architecture</label>
-                    <select id="trigger-workflow-select" class="trigger-select">
-                        <option value="">SELECT_BLUEPRINT...</option>
-                    </select>
-                </div>
-
-                <div id="trigger-config-webhook" class="trigger-config-area" style="display:none;">
-                    <p style="padding: 2rem; border: 2px dashed #000; font-family: 'JetBrains Mono'; font-size: 0.8rem;">ID: PENDING_ACTIVATION</p>
-                </div>
-                <div id="trigger-config-filesystem" class="trigger-config-area" style="display:none;">
-                    <div class="form-group">
-                        <label>Target Path</label>
-                        <input type="text" class="trigger-input" id="fs-watch-path" placeholder="/DIRECTORY/TO/WATCH">
-                    </div>
-                </div>
-                <div id="trigger-config-email" class="trigger-config-area" style="display:none;">
-                    <div class="form-group">
-                        <label>Account Credentials</label>
-                        <input type="text" class="trigger-input" id="email-address" placeholder="EMAIL_OBLIQUE" style="margin-bottom: 1.5rem;">
-                        <input type="password" class="trigger-input" id="email-password" placeholder="APP_KEY_TOKEN">
-                    </div>
-                </div>
-
-                <button onclick="createTrigger()" style="margin-top: 2rem;">Activate Oversight</button>
-            </div>
-
+        <!-- ===== CORE ARCHITECTURE UI ===== -->
+        <div class="main-grid">
+            <!-- Module 01: Concept -->
             <div>
-                <h3 style="text-transform: uppercase; margin-bottom: 3rem;">Monitoring Suite</h3>
-                <div id="triggers-list" style="border-left: 8px solid #000; padding-left: 4rem;">
-                    <p style="text-align:center; padding: 6rem; font-family: 'JetBrains Mono'; color: #666;">SCANNING_SENTINELS...</p>
+                <h2>01. Concept</h2>
+                <p style="margin-bottom:4rem; font-size: 1.25rem; font-style: italic;">Provide the natural language seed
+                    for your automation architecture.</p>
+
+                <div class="form-group">
+                    <div
+                        style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <label>Command Sequence</label>
+                        <button id="btn-voice" class="btn-mic" onclick="toggleVoice()" title="Vocal Input">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <line x1="12" y1="19" x2="12" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <textarea id="prompt" placeholder="DESCRIBE_REQUIREMENT..." style="min-height: 300px;"></textarea>
+                    <div style="font-family:'JetBrains Mono'; font-size: 0.7rem; margin-top: 1rem; color: #666;">
+                        ARCH_HINT: "SEARCH_WEB", "SEND_MAIL", "GUI_AUTOMATION"</div>
                 </div>
 
-                <div id="trigger-event-log" style="display:none; margin-top: 6rem; border-top: 8px solid #000; padding-top: 3rem;">
-                    <h3>Audit Trail</h3>
-                    <div id="trigger-events-container" style="max-height: 500px; overflow-y: scroll;"></div>
+                <button id="btn-generate" onclick="generateWorkflow()">
+                    <span id="gen-text">Initialize Architecture</span>
+                    <div id="gen-loader"
+                        style="display:none; width:20px; height:20px; border:3px solid #fff; border-top-color:transparent; border-radius:50%; animation: spin 0.8s linear infinite;">
+                    </div>
+                </button>
+                <style>
+                    @keyframes spin {
+                        to {
+                            transform: rotate(360deg);
+                        }
+                    }
+                </style>
+
+                <!-- Execution Blueprint (Stable Container) -->
+                <div id="result-area">
+                    <div class="dashboard-header" style="margin-top: 0; margin-bottom: 3rem; border-bottom-width: 4px;">
+                        <h3>Execution Blueprint</h3>
+                    </div>
+                    <div id="workflow-network" style="width: 100%; height: 500px; margin-bottom: 3rem;"></div>
+
+                    <div id="explanation-panel"
+                        style="display:none; padding: 3rem; border: 2px solid #000; background: var(--muted); margin-bottom: 3rem;">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; margin-bottom: 3rem;">
+                        <button id="btn-explain" class="btn-ghost" onclick="toggleExplanation()" disabled>Review
+                            Reason</button>
+                        <button id="btn-execute-new" class="btn-success"
+                            onclick="executeWorkflow(window.currentWorkflowId)">Commit to Action</button>
+                    </div>
+
+                    <details class="editorial-details">
+                        <summary>Raw DAG Schema</summary>
+                        <pre id="dag-output"></pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Module 02: Archive -->
+            <div>
+                <h2>02. Archive</h2>
+                <p style="margin-bottom:4rem; font-size: 1.25rem; font-style: italic;">Persistent records of generated
+                    intelligence logs.</p>
+
+                <div id="workflows-area" style="border-top: 4px solid #000; padding-top: 2rem;">
+                    <p style="text-align:center; padding: 6rem; font-family: 'JetBrains Mono';">PENDING_RECORDS...</p>
+                </div>
+
+                <div id="execution-logs" style="display:none; margin-top:6rem;">
+                    <h3 style="margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1rem;">Live
+                        Intelligence Log</h3>
+                    <pre id="log-output" style="height: 400px; overflow-y: scroll;"></pre>
+                    <button class="btn-ghost" style="margin-top:2rem;" onclick="refreshLogs()">Synchronize Logs</button>
+                </div>
+
+                <div class="editorial-rule thick"></div>
+
+                <h2>03. Protocol</h2>
+                <p style="margin-bottom:3rem; font-style: italic;">Governance for OS-level permissions.</p>
+
+                <div id="allowed-apps-container" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-bottom:3rem;">
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr auto; gap: 1.5rem;">
+                    <input type="text" id="new-app-input" placeholder="EXECUTABLE_NAME.EXE" class="trigger-input">
+                    <button onclick="addAllowedApp()" style="padding: 0 3rem; width: auto;">Add Protocol</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="editorial-rule thick"></div>
+
+        <!-- ===== MODULE 04: SENTINELS ===== -->
+        <div style="margin-top: 4rem;">
+            <div class="dashboard-header">
+                <h2>04. Sentinels</h2>
+                <div class="live-badge">
+                    <div class="live-dot"></div>
+                    OVERSIGHT_ACTIVE
+                </div>
+            </div>
+            <p style="margin-bottom:6rem; font-size: 1.5rem; font-style: italic;">Event-driven oversight protocols.</p>
+
+            <div class="main-grid" style="grid-template-columns: 1fr 1.5fr;">
+                <div class="glass-panel" style="box-shadow: none;">
+                    <h3 style="text-transform: uppercase; margin-bottom: 3rem;">New Sentinel</h3>
+                    <div class="form-group">
+                        <label>Origin</label>
+                        <select id="trigger-type-select" class="trigger-select" onchange="updateTriggerConfigUI()">
+                            <option value="">NODE_TYPE...</option>
+                            <option value="webhook">WEBHOOK_LINK</option>
+                            <option value="filesystem">PATH_OBSERVER</option>
+                            <option value="email">MAIL_WATCHER</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Architecture</label>
+                        <select id="trigger-workflow-select" class="trigger-select">
+                            <option value="">SELECT_BLUEPRINT...</option>
+                        </select>
+                    </div>
+
+                    <div id="trigger-config-webhook" class="trigger-config-area" style="display:none;">
+                        <p
+                            style="padding: 2rem; border: 2px dashed #000; font-family: 'JetBrains Mono'; font-size: 0.8rem;">
+                            ID: PENDING_ACTIVATION</p>
+                    </div>
+                    <div id="trigger-config-filesystem" class="trigger-config-area" style="display:none;">
+                        <div class="form-group">
+                            <label>Target Path</label>
+                            <input type="text" class="trigger-input" id="fs-watch-path"
+                                placeholder="/DIRECTORY/TO/WATCH">
+                        </div>
+                    </div>
+                    <div id="trigger-config-email" class="trigger-config-area" style="display:none;">
+                        <div class="form-group">
+                            <label>Account Credentials</label>
+                            <input type="text" class="trigger-input" id="email-address" placeholder="EMAIL_OBLIQUE"
+                                style="margin-bottom: 1.5rem;">
+                            <input type="password" class="trigger-input" id="email-password"
+                                placeholder="APP_KEY_TOKEN">
+                        </div>
+                    </div>
+
+                    <button onclick="createTrigger()" style="margin-top: 2rem;">Activate Oversight</button>
+                </div>
+
+                <div>
+                    <h3 style="text-transform: uppercase; margin-bottom: 3rem;">Monitoring Suite</h3>
+                    <div id="triggers-list" style="border-left: 8px solid #000; padding-left: 4rem;">
+                        <p style="text-align:center; padding: 6rem; font-family: 'JetBrains Mono'; color: #666;">
+                            SCANNING_SENTINELS...</p>
+                    </div>
+
+                    <div id="trigger-event-log"
+                        style="display:none; margin-top: 6rem; border-top: 8px solid #000; padding-top: 3rem;">
+                        <h3>Audit Trail</h3>
+                        <div id="trigger-events-container" style="max-height: 500px; overflow-y: scroll;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- ===== OVERLAYS ===== -->
-<div class="modal-overlay" id="risk-modal">
-    <div class="modal-content">
-        <h2 class="modal-title">Protocol Risk</h2>
-        <div class="editorial-rule"></div>
-        <p style="font-size: 1.5rem; font-style: italic; margin-bottom: 4rem;">The following nodes require architectural authorization.</p>
-        
-        <div id="risk-list-container" style="border: 4px solid #000; padding: 3rem; margin-bottom: 4rem;"></div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem;">
-            <button class="btn-ghost" onclick="closeRiskModal()">Decline</button>
-            <button onclick="confirmExecuteWorkflow()">Authorize Execution</button>
+    <!-- ===== OVERLAYS ===== -->
+    <div class="modal-overlay" id="risk-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Protocol Risk</h2>
+            <div class="editorial-rule"></div>
+            <p style="font-size: 1.5rem; font-style: italic; margin-bottom: 4rem;">The following nodes require
+                architectural authorization.</p>
+
+            <div id="risk-list-container" style="border: 4px solid #000; padding: 3rem; margin-bottom: 4rem;"></div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem;">
+                <button class="btn-ghost" onclick="closeRiskModal()">Decline</button>
+                <button onclick="confirmExecuteWorkflow()">Authorize Execution</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="voice-overlay" class="voice-status-overlay">
-    <div style="display: grid; grid-template-columns: auto 1fr; gap: 6rem; align-items: center;">
-        <div style="display:flex; align-items: flex-end;">
-            <div class="voice-bar" style="animation-delay: 0.1s"></div>
-            <div class="voice-bar" style="animation-delay: 0.3s; height: 35px;"></div>
-            <div class="voice-bar" style="animation-delay: 0.5s; height: 20px;"></div>
-            <div class="voice-bar" style="animation-delay: 0.2s; height: 45px;"></div>
-            <div class="voice-bar" style="animation-delay: 0.4s"></div>
-        </div>
-        <div>
-            <p style="font-family:'JetBrains Mono'; text-transform: uppercase; letter-spacing: 0.4rem; font-size: 0.9rem; margin-bottom: 1rem; color: #666;">Capturing Audio...</p>
-            <div id="voice-transcript" style="font-family: 'Playfair Display'; font-size: 5rem; font-weight: 700; line-height: 1;">Initializing...</div>
+    <div id="voice-overlay" class="voice-status-overlay">
+        <div style="display: grid; grid-template-columns: auto 1fr; gap: 6rem; align-items: center;">
+            <div style="display:flex; align-items: flex-end;">
+                <div class="voice-bar" style="animation-delay: 0.1s"></div>
+                <div class="voice-bar" style="animation-delay: 0.3s; height: 35px;"></div>
+                <div class="voice-bar" style="animation-delay: 0.5s; height: 20px;"></div>
+                <div class="voice-bar" style="animation-delay: 0.2s; height: 45px;"></div>
+                <div class="voice-bar" style="animation-delay: 0.4s"></div>
+            </div>
+            <div>
+                <p
+                    style="font-family:'JetBrains Mono'; text-transform: uppercase; letter-spacing: 0.4rem; font-size: 0.9rem; margin-bottom: 1rem; color: #666;">
+                    Capturing Audio...</p>
+                <div id="voice-transcript"
+                    style="font-family: 'Playfair Display'; font-size: 5rem; font-weight: 700; line-height: 1;">
+                    Initializing...</div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const API_BASE = "http://localhost:8000";
-    window.currentWorkflowId = null;
-    window.currentExecutionId = null;
-    let network = null;
-    let nodesDataSet = null;
-    let edgesDataSet = null;
+    <script>
+        const API_BASE = "http://localhost:8000";
+        window.currentWorkflowId = null;
+        window.currentExecutionId = null;
+        let network = null;
+        let nodesDataSet = null;
+        let edgesDataSet = null;
 
-    // ===== CORE DASHBOARD LOGIC =====
-    async function fetchMetrics() {
-        try {
-            const res = await fetch(`${API_BASE}/metrics`);
-            const data = await res.json();
-            
-            document.getElementById('kpi-total').textContent = String(data.total).padStart(2, '0');
-            document.getElementById('kpi-success').textContent = `${data.success_rate}%`;
-            document.getElementById('kpi-avg').textContent = `${data.avg_time_sec}s`;
-            document.getElementById('kpi-failure').textContent = `${data.failure_rate}%`;
-            document.getElementById('kpi-success-count').textContent = `${data.success_count} Verified`;
-            document.getElementById('kpi-failure-count').textContent = `${data.fail_count} Interrupts`;
-            
-            document.getElementById('donut-center-val').textContent = data.total;
-            document.getElementById('leg-success').textContent = data.success_count;
-            document.getElementById('leg-failure').textContent = data.fail_count;
-            document.getElementById('leg-pending').textContent = data.pending_count;
+        // ===== CORE DASHBOARD LOGIC =====
+        async function fetchMetrics() {
+            try {
+                const res = await fetch(`${API_BASE}/metrics`);
+                const data = await res.json();
 
-            updateDonut(data.success_count, data.fail_count + data.pending_count, data.total);
-        } catch(e) {}
-    }
+                document.getElementById('kpi-total').textContent = String(data.total).padStart(2, '0');
+                document.getElementById('kpi-success').textContent = `${data.success_rate}%`;
+                document.getElementById('kpi-avg').textContent = `${data.avg_time_sec}s`;
+                document.getElementById('kpi-failure').textContent = `${data.failure_rate}%`;
+                document.getElementById('kpi-success-count').textContent = `${data.success_count} Verified`;
+                document.getElementById('kpi-failure-count').textContent = `${data.fail_count} Interrupts`;
 
-    function updateDonut(success, fail, total) {
-        if (total === 0) return;
-        const circ = 2 * Math.PI * 70;
-        const successPart = (success / total) * circ;
-        const failPart = (fail / total) * circ;
-        
-        document.getElementById('arc-success').style.strokeDasharray = `${successPart} 440`;
-        document.getElementById('arc-failure').style.strokeDasharray = `${failPart} 440`;
-        document.getElementById('arc-failure').style.strokeDashoffset = `-${successPart}`;
-    }
+                document.getElementById('donut-center-val').textContent = data.total;
+                document.getElementById('leg-success').textContent = data.success_count;
+                document.getElementById('leg-failure').textContent = data.fail_count;
+                document.getElementById('leg-pending').textContent = data.pending_count;
 
-    // ===== WORKFLOW ENGINE =====
-    async function fetchWorkflows() {
-        try {
-            const res = await fetch(`${API_BASE}/workflows`);
-            const data = await res.json();
-            const area = document.getElementById('workflows-area');
-            area.innerHTML = '';
+                updateDonut(data.success_count, data.fail_count + data.pending_count, data.total);
+            } catch (e) { }
+        }
 
-            if (data.length === 0) {
-                area.innerHTML = '<p style="text-align:center; padding: 4rem; font-family: \'JetBrains Mono\'; color:#666;">NO_RECORDS_STORED</p>';
-                return;
-            }
+        function updateDonut(success, fail, total) {
+            if (total === 0) return;
+            const circ = 2 * Math.PI * 70;
+            const successPart = (success / total) * circ;
+            const failPart = (fail / total) * circ;
 
-            data.slice(0, 15).forEach(wf => {
-                const div = document.createElement('div');
-                div.className = 'workflow-item';
-                const date = new Date(wf.created_at + 'Z').toLocaleDateString();
-                const time = new Date(wf.created_at + 'Z').toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                div.innerHTML = `
+            document.getElementById('arc-success').style.strokeDasharray = `${successPart} 440`;
+            document.getElementById('arc-failure').style.strokeDasharray = `${failPart} 440`;
+            document.getElementById('arc-failure').style.strokeDashoffset = `-${successPart}`;
+        }
+
+        // ===== WORKFLOW ENGINE =====
+        async function fetchWorkflows() {
+            try {
+                const res = await fetch(`${API_BASE}/workflows`);
+                const data = await res.json();
+                const area = document.getElementById('workflows-area');
+                area.innerHTML = '';
+
+                if (data.length === 0) {
+                    area.innerHTML = '<p style="text-align:center; padding: 4rem; font-family: \'JetBrains Mono\'; color:#666;">NO_RECORDS_STORED</p>';
+                    return;
+                }
+
+                data.slice(0, 15).forEach(wf => {
+                    const div = document.createElement('div');
+                    div.className = 'workflow-item';
+                    const date = new Date(wf.created_at + 'Z').toLocaleDateString();
+                    const time = new Date(wf.created_at + 'Z').toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    div.innerHTML = `
                     <div class="wf-meta">
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">${wf.id.substring(0,8).toUpperCase()}</h3>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">${wf.id.substring(0, 8).toUpperCase()}</h3>
                         <p style="font-family:'JetBrains Mono'; font-size:0.75rem; color:#666;">CREATED: ${date} [${time}]</p>
                     </div>
                     <div style="display:flex; gap: 1rem;">
@@ -593,238 +924,239 @@
                         <button onclick="executeWorkflow('${wf.id}')" style="padding: 0.75rem 1.5rem; width: auto; font-size: 0.7rem;">RUN</button>
                     </div>
                 `;
-                area.appendChild(div);
-            });
-        } catch(e) {}
-    }
+                    area.appendChild(div);
+                });
+            } catch (e) { }
+        }
 
-    async function generateWorkflow() {
-        const prompt = document.getElementById('prompt').value.trim();
-        if (!prompt) return;
+        async function generateWorkflow() {
+            const prompt = document.getElementById('prompt').value.trim();
+            if (!prompt) return;
 
-        const btn = document.getElementById('btn-generate');
-        const text = document.getElementById('gen-text');
-        const loader = document.getElementById('gen-loader');
+            const btn = document.getElementById('btn-generate');
+            const text = document.getElementById('gen-text');
+            const loader = document.getElementById('gen-loader');
 
-        btn.disabled = true;
-        text.style.display = 'none';
-        loader.style.display = 'block';
+            btn.disabled = true;
+            text.style.display = 'none';
+            loader.style.display = 'block';
 
-        try {
-            const res = await fetch(`${API_BASE}/create-workflow`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt })
-            });
-            const data = await res.json();
-            if (res.ok) {
+            try {
+                const res = await fetch(`${API_BASE}/create-workflow`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    window.currentWorkflowId = data.id;
+                    document.getElementById('result-area').classList.add('active');
+                    document.getElementById('dag-output').textContent = JSON.stringify(data.dag_json, null, 2);
+                    renderExplanation(data.explanation);
+                    setTimeout(() => renderGraph(data.dag_json), 100);
+                    fetchWorkflows();
+                }
+            } catch (e) { } finally {
+                btn.disabled = false;
+                text.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        }
+
+        async function previewWorkflow(id) {
+            try {
+                const res = await fetch(`${API_BASE}/workflow/${id}`);
+                const data = await res.json();
                 window.currentWorkflowId = data.id;
                 document.getElementById('result-area').classList.add('active');
                 document.getElementById('dag-output').textContent = JSON.stringify(data.dag_json, null, 2);
                 renderExplanation(data.explanation);
                 setTimeout(() => renderGraph(data.dag_json), 100);
-                fetchWorkflows();
-            }
-        } catch(e) {} finally {
-            btn.disabled = false;
-            text.style.display = 'block';
-            loader.style.display = 'none';
+            } catch (e) { }
         }
-    }
 
-    async function previewWorkflow(id) {
-        try {
-            const res = await fetch(`${API_BASE}/workflow/${id}`);
-            const data = await res.json();
-            window.currentWorkflowId = data.id;
-            document.getElementById('result-area').classList.add('active');
-            document.getElementById('dag-output').textContent = JSON.stringify(data.dag_json, null, 2);
-            renderExplanation(data.explanation);
-            setTimeout(() => renderGraph(data.dag_json), 100);
-        } catch(e) {}
-    }
+        function renderGraph(dag) {
+            const container = document.getElementById('workflow-network');
+            nodesDataSet = new vis.DataSet(dag.nodes.map(n => ({
+                id: n.id,
+                label: n.action.split('/').pop().toUpperCase(),
+                shape: 'box',
+                font: { face: 'JetBrains Mono', size: 12, color: '#000' },
+                color: { background: '#fff', border: '#000' },
+                borderWidth: 2,
+                margin: 15
+            })));
+            edgesDataSet = new vis.DataSet(dag.edges.map(e => ({
+                from: e.from, to: e.to,
+                arrows: 'to',
+                color: { color: '#000' },
+                width: 2
+            })));
+            network = new vis.Network(container, { nodes: nodesDataSet, edges: edgesDataSet }, {
+                layout: { hierarchical: { direction: 'LR', sortMethod: 'directed' } },
+                physics: false
+            });
+        }
 
-    function renderGraph(dag) {
-        const container = document.getElementById('workflow-network');
-        nodesDataSet = new vis.DataSet(dag.nodes.map(n => ({
-            id: n.id,
-            label: n.action.split('/').pop().toUpperCase(),
-            shape: 'box',
-            font: { face: 'JetBrains Mono', size: 12, color: '#000' },
-            color: { background: '#fff', border: '#000' },
-            borderWidth: 2,
-            margin: 15
-        })));
-        edgesDataSet = new vis.DataSet(dag.edges.map(e => ({
-            from: e.from, to: e.to,
-            arrows: 'to',
-            color: { color: '#000' },
-            width: 2
-        })));
-        network = new vis.Network(container, { nodes: nodesDataSet, edges: edgesDataSet }, {
-            layout: { hierarchical: { direction: 'LR', sortMethod: 'directed' } },
-            physics: false
-        });
-    }
+        async function executeWorkflow(id) {
+            if (!id) return;
+            document.getElementById('execution-logs').style.display = 'block';
+            const logOut = document.getElementById('log-output');
+            logOut.textContent = "VALIDATING_PROTOCOL...";
 
-    async function executeWorkflow(id) {
-        if (!id) return;
-        document.getElementById('execution-logs').style.display = 'block';
-        const logOut = document.getElementById('log-output');
-        logOut.textContent = "VALIDATING_PROTOCOL...";
-        
-        try {
-            const valRes = await fetch(`${API_BASE}/workflow/${id}/validate`);
-            const val = await valRes.json();
-            if (val.needs_approval) {
-                const riskCont = document.getElementById('risk-list-container');
-                riskCont.innerHTML = val.risky_nodes.map(n => `
+            try {
+                const valRes = await fetch(`${API_BASE}/workflow/${id}/validate`);
+                const val = await valRes.json();
+                if (val.needs_approval) {
+                    const riskCont = document.getElementById('risk-list-container');
+                    riskCont.innerHTML = val.risky_nodes.map(n => `
                     <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
                         <span style="font-family:'JetBrains Mono'; font-weight:700;">${n.action}</span>
                         <span style="color:#000;">[!] ${n.risk}</span>
                     </div>
                 `).join('');
-                window.pendingExecutionId = id;
-                document.getElementById('risk-modal').classList.add('active');
-                return;
-            }
-            doActualExecution(id, false);
-        } catch(e) {}
-    }
-
-    async function doActualExecution(id, approved) {
-        document.getElementById('risk-modal').classList.remove('active');
-        try {
-            const res = await fetch(`${API_BASE}/execute/${id}?approved=${approved}`, { method: 'POST' });
-            const data = await res.json();
-            window.currentExecutionId = data.id;
-            refreshLogs();
-        } catch(e) {}
-    }
-
-    async function refreshLogs() {
-        if (!window.currentExecutionId) return;
-        try {
-            const res = await fetch(`${API_BASE}/executions/${window.currentExecutionId}`);
-            const data = await res.json();
-            let text = `ID: ${data.execution.id}\nSTATUS: ${data.execution.status}\n\n`;
-            data.logs.forEach(l => {
-                text += `[${new Date(l.timestamp + 'Z').toLocaleTimeString()}] ${l.message}\n`;
-            });
-            document.getElementById('log-output').textContent = text;
-            
-            // Graph highlighting logic
-            if (nodesDataSet && data.logs) {
-                let current = null;
-                let done = new Set();
-                data.logs.forEach(l => {
-                    let m1 = l.message.match(/PRE-EXEC: Node=([\w-]+)/);
-                    if (m1) current = m1[1];
-                    let m2 = l.message.match(/Executed ([\w-]+):/);
-                    if (m2) done.add(m2[1]);
-                });
-                nodesDataSet.forEach(node => {
-                    let bg = '#fff', fc = '#000';
-                    if (done.has(node.id)) { bg = '#000'; fc = '#fff'; }
-                    else if (node.id === current) { bg = '#f5f5f5'; }
-                    nodesDataSet.update({ id: node.id, color: { background: bg }, font: { color: fc } });
-                });
-            }
-
-            if (["PENDING", "RUNNING"].includes(data.execution.status)) setTimeout(refreshLogs, 1500);
-        } catch(e) {}
-    }
-
-    function toggleExplanation() {
-        const p = document.getElementById('explanation-panel');
-        p.style.display = p.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function renderExplanation(exp) {
-        const p = document.getElementById('explanation-panel');
-        const b = document.getElementById('btn-explain');
-        if (exp && exp.length > 0) {
-            b.disabled = false;
-            p.innerHTML = exp.map(s => `<p style="margin-bottom:1rem;">➜ ${s}</p>`).join('');
-        } else {
-            b.disabled = true;
-            p.style.display = 'none';
+                    window.pendingExecutionId = id;
+                    document.getElementById('risk-modal').classList.add('active');
+                    return;
+                }
+                doActualExecution(id, false);
+            } catch (e) { }
         }
-    }
 
-    // ===== VOICE LOGIC =====
-    let recognition = null;
-    function initVoice() {
-        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!Speech) return;
-        recognition = new Speech();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.onstart = () => {
-            document.getElementById('voice-overlay').classList.add('active');
-            document.getElementById('btn-voice').classList.add('listening');
-        };
-        recognition.onresult = (e) => {
-            let final = '';
-            for (let i = e.resultIndex; i < e.results.length; ++i) {
-                if (e.results[i].isFinal) final += e.results[i][0].transcript;
-            }
-            if (final) {
-                document.getElementById('voice-transcript').textContent = final;
-                document.getElementById('prompt').value = final;
-                setTimeout(() => stopVoice(), 2000);
-            }
-        };
-        recognition.onend = () => {
-            document.getElementById('voice-overlay').classList.remove('active');
-            document.getElementById('btn-voice').classList.remove('listening');
-        };
-    }
-    function toggleVoice() { if (!recognition) initVoice(); recognition.start(); }
-    function stopVoice() { if (recognition) recognition.stop(); }
+        async function doActualExecution(id, approved) {
+            document.getElementById('risk-modal').classList.remove('active');
+            try {
+                const res = await fetch(`${API_BASE}/execute/${id}?approved=${approved}`, { method: 'POST' });
+                const data = await res.json();
+                window.currentExecutionId = data.id;
+                refreshLogs();
+            } catch (e) { }
+        }
 
-    // ===== PROTOCOL & SENTINELS =====
-    async function addAllowedApp() {
-        const app = document.getElementById('new-app-input').value.trim();
-        if (!app) return;
-        await fetch(`${API_BASE}/settings/allowed-apps`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ app_name: app })
-        });
-        loadAllowedApps();
-    }
-    async function loadAllowedApps() {
-        const res = await fetch(`${API_BASE}/settings/allowed-apps`);
-        const data = await res.json();
-        const cont = document.getElementById('allowed-apps-container');
-        cont.innerHTML = data.allowed_apps.map(a => `<span style="border:2px solid #000; padding:0.5rem 1rem; font-family:'JetBrains Mono'; font-size:0.75rem;">${a}</span>`).join('');
-    }
-    async function fetchTriggers() {
-        const res = await fetch(`${API_BASE}/triggers`);
-        const data = await res.json();
-        const list = document.getElementById('triggers-list');
-        list.innerHTML = data.length ? data.map(t => `
+        async function refreshLogs() {
+            if (!window.currentExecutionId) return;
+            try {
+                const res = await fetch(`${API_BASE}/executions/${window.currentExecutionId}`);
+                const data = await res.json();
+                let text = `ID: ${data.execution.id}\nSTATUS: ${data.execution.status}\n\n`;
+                data.logs.forEach(l => {
+                    text += `[${new Date(l.timestamp + 'Z').toLocaleTimeString()}] ${l.message}\n`;
+                });
+                document.getElementById('log-output').textContent = text;
+
+                // Graph highlighting logic
+                if (nodesDataSet && data.logs) {
+                    let current = null;
+                    let done = new Set();
+                    data.logs.forEach(l => {
+                        let m1 = l.message.match(/PRE-EXEC: Node=([\w-]+)/);
+                        if (m1) current = m1[1];
+                        let m2 = l.message.match(/Executed ([\w-]+):/);
+                        if (m2) done.add(m2[1]);
+                    });
+                    nodesDataSet.forEach(node => {
+                        let bg = '#fff', fc = '#000';
+                        if (done.has(node.id)) { bg = '#000'; fc = '#fff'; }
+                        else if (node.id === current) { bg = '#f5f5f5'; }
+                        nodesDataSet.update({ id: node.id, color: { background: bg }, font: { color: fc } });
+                    });
+                }
+
+                if (["PENDING", "RUNNING"].includes(data.execution.status)) setTimeout(refreshLogs, 1500);
+            } catch (e) { }
+        }
+
+        function toggleExplanation() {
+            const p = document.getElementById('explanation-panel');
+            p.style.display = p.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function renderExplanation(exp) {
+            const p = document.getElementById('explanation-panel');
+            const b = document.getElementById('btn-explain');
+            if (exp && exp.length > 0) {
+                b.disabled = false;
+                p.innerHTML = exp.map(s => `<p style="margin-bottom:1rem;">➜ ${s}</p>`).join('');
+            } else {
+                b.disabled = true;
+                p.style.display = 'none';
+            }
+        }
+
+        // ===== VOICE LOGIC =====
+        let recognition = null;
+        function initVoice() {
+            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!Speech) return;
+            recognition = new Speech();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.onstart = () => {
+                document.getElementById('voice-overlay').classList.add('active');
+                document.getElementById('btn-voice').classList.add('listening');
+            };
+            recognition.onresult = (e) => {
+                let final = '';
+                for (let i = e.resultIndex; i < e.results.length; ++i) {
+                    if (e.results[i].isFinal) final += e.results[i][0].transcript;
+                }
+                if (final) {
+                    document.getElementById('voice-transcript').textContent = final;
+                    document.getElementById('prompt').value = final;
+                    setTimeout(() => stopVoice(), 2000);
+                }
+            };
+            recognition.onend = () => {
+                document.getElementById('voice-overlay').classList.remove('active');
+                document.getElementById('btn-voice').classList.remove('listening');
+            };
+        }
+        function toggleVoice() { if (!recognition) initVoice(); recognition.start(); }
+        function stopVoice() { if (recognition) recognition.stop(); }
+
+        // ===== PROTOCOL & SENTINELS =====
+        async function addAllowedApp() {
+            const app = document.getElementById('new-app-input').value.trim();
+            if (!app) return;
+            await fetch(`${API_BASE}/settings/allowed-apps`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ app_name: app })
+            });
+            loadAllowedApps();
+        }
+        async function loadAllowedApps() {
+            const res = await fetch(`${API_BASE}/settings/allowed-apps`);
+            const data = await res.json();
+            const cont = document.getElementById('allowed-apps-container');
+            cont.innerHTML = data.allowed_apps.map(a => `<span style="border:2px solid #000; padding:0.5rem 1rem; font-family:'JetBrains Mono'; font-size:0.75rem;">${a}</span>`).join('');
+        }
+        async function fetchTriggers() {
+            const res = await fetch(`${API_BASE}/triggers`);
+            const data = await res.json();
+            const list = document.getElementById('triggers-list');
+            list.innerHTML = data.length ? data.map(t => `
             <div class="trigger-card">
                 <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
                     <span style="font-family:'JetBrains Mono'; text-transform:uppercase; font-size:0.75rem;">[${t.trigger_type}]</span>
-                    <span style="font-family:'JetBrains Mono'; font-size:0.7rem;">${t.id.substring(0,6)}</span>
+                    <span style="font-family:'JetBrains Mono'; font-size:0.7rem;">${t.id.substring(0, 6)}</span>
                 </div>
-                <p style="font-size:0.8rem; margin-bottom:2rem;">TARGET: ${t.workflow_id.substring(0,8).toUpperCase()}</p>
+                <p style="font-size:0.8rem; margin-bottom:2rem;">TARGET: ${t.workflow_id.substring(0, 8).toUpperCase()}</p>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
                     <button class="btn-ghost" onclick="viewTriggerEvents('${t.id}')" style="padding:0.5rem; font-size:0.6rem;">TRAIL</button>
                     <button class="btn-ghost" onclick="deleteTrigger('${t.id}')" style="padding:0.5rem; font-size:0.6rem;">TERMINATE</button>
                 </div>
             </div>
         `).join('') : '<p style="text-align:center; padding:4rem; font-family:\'JetBrains Mono\';">NO_ACTIVE_SENTINELS</p>';
-    }
+        }
 
-    // Init Sequence
-    fetchMetrics();
-    fetchWorkflows();
-    loadAllowedApps();
-    fetchTriggers();
-    setInterval(fetchMetrics, 10000);
-</script>
+        // Init Sequence
+        fetchMetrics();
+        fetchWorkflows();
+        loadAllowedApps();
+        fetchTriggers();
+        setInterval(fetchMetrics, 10000);
+    </script>
 </body>
+
 </html>
