@@ -25,33 +25,58 @@ class WorkflowState(TypedDict):
     errors: list
 
 
+def _resolve_template_recursive(obj: Any, context: Dict[str, Any]) -> Any:
+    """Recursively replace {{node_id}} placeholders in strings, lists, and dicts."""
+    if isinstance(obj, str):
+        result = obj
+        # Double braces {{key}}
+        for key, val in context.items():
+            val_str = str(val)
+            result = result.replace(f"{{{{{key}.output}}}}", val_str)
+            result = result.replace(f"{{{{{key}}}}}", val_str)
+            
+        # Single braces {key} (agent sometimes uses these)
+        for key, val in context.items():
+            val_str = str(val)
+            result = result.replace(f"{{{key}.output}}", val_str)
+            result = result.replace(f"{{{key}}}", val_str)
+            
+        return result
+        
+    if isinstance(obj, list):
+        return [_resolve_template_recursive(item, context) for item in obj]
+        
+    if isinstance(obj, dict):
+        return {k: _resolve_template_recursive(v, context) for k, v in obj.items()}
+        
+    return obj
+
+
 # ── Core dispatch function ──────────────────────────────────────────────────
 
 def execute_node_action(action: str, params: dict, context: dict, max_retries: int = 3):
     """
     Dispatch `action` to the registered node plugin via polymorphism.
-
-    Falls back to a generic SUCCESS response for actions that are structural
-    (START, END, etc.) or unregistered but non-critical.
     """
     node = get_node(action)
 
     if node is None:
-        # Unknown but non-fatal: log and continue
         return f"Executed action {action} with status: SUCCESS"
+
+    # ── Resolve {{placeholders}} in params before execution ──────────
+    resolved_params = _resolve_template_recursive(params, context)
 
     last_error = None
     for attempt in range(max_retries):
         try:
-            # Run optional validation hook first
-            node.validate(params)
-            return node.execute(params, context)
+            node.validate(resolved_params)
+            return node.execute(resolved_params, context)
         except Exception as exc:
             last_error = exc
             if attempt < max_retries - 1:
                 time.sleep(1)
 
-    raise last_error  # re-raise after all retries exhausted
+    raise last_error
 
 
 # ── DAG execution engine ────────────────────────────────────────────────────

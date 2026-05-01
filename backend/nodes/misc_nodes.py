@@ -33,8 +33,8 @@ class WebSearchNode(BaseNode):
         payload = json.dumps({
             "api_key": api_key,
             "query": query,
-            "search_depth": "basic",
-            "include_answer": False
+            "search_depth": "advanced",
+            "include_answer": True
         }).encode("utf-8")
         req = urllib.request.Request("https://api.tavily.com/search", data=payload, method="POST")
         req.add_header("Content-Type", "application/json")
@@ -45,7 +45,7 @@ class WebSearchNode(BaseNode):
         if not results:
             return f"No search results found for: '{query}'"
         lines = [f"Search Results for '{query}':"]
-        for r in results[:4]:
+        for r in results[:8]:
             lines.append(f"- {r.get('title')} ({r.get('url')}):\n  {r.get('content')}")
         return "\n\n".join(lines)
 
@@ -97,14 +97,26 @@ class ExtractDataNode(BaseNode):
             return f"EXTRACT_DATA: source '{data_ref}' not found in context."
 
         data = context[data_ref]
+
+        # If data is a string, try to parse as JSON first
+        if isinstance(data, str):
+            try:
+                parsed = json.loads(data)
+                if isinstance(parsed, (dict, list)):
+                    data = parsed
+            except:
+                pass
+
         if isinstance(data, list):
             item = data[0] if data else None
             if isinstance(item, dict) and key:
                 return item.get(key, "Key not found")
-            return str(item) if item is not None else "Empty list"
+            return item if item is not None else "Empty list"
         if isinstance(data, dict):
-            return data.get(key, "Key not found")
-        return str(data)
+            if key:
+                return data.get(key, "Key not found")
+            return data
+        return data
 
 
 # ── TIME ────────────────────────────────────────────────────────────────────

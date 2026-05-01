@@ -57,9 +57,14 @@ class WorkflowTasks:
                   TIME / GET_TIME → no params needed
 
                 === RULES ===
+                - SELECTIVE DELIVERABLES: If the user specifies a specific format (e.g., "Create an Excel spreadsheet" or "Write a Word report"), STRICTLY follow that request and only generate the requested file type. Only generate a comprehensive suite (Word, Excel, PPT) if the user's query is broad (e.g., "Analyze X", "Give me a report on Y", or "Research Z").
+                - COMPLETE DATA EXTRACTION: When fetching or extracting data for spreadsheets or reports, you MUST ensure you capture ALL available rows (e.g. all 10 teams in a league) and ALL relevant columns (e.g. Wins, Losses, NRR, Points). Never truncate the data to just a few entries unless explicitly asked.
+                - DATA TRANSFORMATION PATTERN: To get real, structured data from unstructured search results, you MUST follow this pattern: WEB_SEARCH -> LLM_PROMPT (to process raw text into a JSON list or formatted report) -> OFFICE NODE. 
+                  * The LLM_PROMPT node should have a prompt like: "Extract the FULL table from these search results: {{web_search_node_id}}. Include ALL teams and ALL columns (Rank, Team, M, W, L, NRR, Pts). Format it as a JSON list of lists for a spreadsheet. Return ONLY the JSON."
+                  * NEVER put {{node_id}} placeholders directly inside a list for a spreadsheet, as this will only create a single row. Instead, pass the LLM_PROMPT node's ID to the CREATE_SPREADSHEET node's 'data' parameter.
+                - DATA ACCURACY: Always prioritize using real information from previous nodes. NEVER use generic placeholders like "Team A" or "Team B" or "Team 1" if real data is available in the context.
+                - DATA FLOW: Use node IDs for 'content_ref', 'data', 'slides_ref', and 'file_ref' to pass data between nodes. 
                 - WHATSAPP_MESSAGE: use the contact's name EXACTLY as it appears in the user's WhatsApp contacts.
-                - CREATE_DOCUMENT/SPREADSHEET/PRESENTATION: set content_ref to the node_id of the step that generates your content (e.g. a WEB_SEARCH node).
-                - DESKTOP_APP: to open a file created by a previous node, set file_ref to that node_id.
                 - NEVER use placeholders like "[Insert Here]". Use real values from the prompt.
                 - Provide ONLY valid JSON, no markdown.
             """),

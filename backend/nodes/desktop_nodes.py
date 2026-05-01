@@ -6,6 +6,9 @@ import subprocess
 from pathlib import Path
 from .base import BaseNode
 
+import json
+from typing import Any, List, Union
+
 # Default output directory for created documents
 OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR", r"D:\GENAI\AI-workflow builder\outputs"))
 
@@ -15,16 +18,75 @@ def _ensure_output_dir():
     return OUTPUT_DIR
 
 
-def _resolve_content(params: dict, context: dict) -> str:
-    """Pull content from params directly or from a context reference."""
-    content = params.get("content", "")
-    ref = params.get("content_ref") or params.get("body_ref")
-    if ref and ref in context:
-        content = str(context[ref])
-    elif not content and context:
-        # fallback: use the last context value if nothing specified
-        content = str(list(context.values())[-1])
-    return content
+def _resolve_data(params: dict, context: dict, key: str, refs: List[str]) -> Any:
+    """
+    Resolve data from params or context.
+    1. Check the primary key (e.g. 'data', 'content').
+    2. If it's a string, check if it's a reference to a context key.
+    3. If still not found, check the provided ref keys (e.g. 'content_ref').
+    4. Fallback to the last item in context.
+    """
+    val = params.get(key)
+
+    # If key is a string reference to context
+    if isinstance(val, str):
+        # Strip common reference wrappers
+        clean_val = val.strip("{}")
+        if clean_val in context:
+            val = context[clean_val]
+    
+    # If not found, check explicit ref keys
+    if not val:
+        for r in refs:
+            ref_id = params.get(r)
+            if isinstance(ref_id, str):
+                clean_ref = ref_id.strip("{}")
+                if clean_ref in context:
+                    val = context[clean_ref]
+                    break
+                
+    # Fallback to last context value if absolutely nothing specified
+    if not val and context:
+        val = list(context.values())[-1]
+        
+    return val
+
+
+def _parse_to_list(data: Any) -> List[Any]:
+    """Try to force data into a list format (for spreadsheets/slides)."""
+    if isinstance(data, list):
+        return data
+    if isinstance(data, str):
+        text = data.strip()
+        # Try direct JSON
+        try:
+            parsed = json.loads(text)
+            if parsed is not None:
+                return parsed
+        except:
+            pass
+        # Try Markdown JSON blocks
+        import re
+        match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)
+        if match:
+            try:
+                parsed = json.loads(match.group(1).strip())
+                if parsed is not None:
+                    return parsed
+            except:
+                pass
+        # Fallback to CSV-like splitting
+        return [line.split(",") for line in text.split("\n") if line.strip()]
+    return [str(data)] if data else []
+
+
+def _parse_to_str(data: Any) -> str:
+    """Force data into a string format (for documents/email)."""
+    if isinstance(data, str):
+        return data
+    if isinstance(data, (dict, list)):
+        return json.dumps(data, indent=2)
+    return str(data) if data is not None else ""
 
 
 # ── DESKTOP_APP ─────────────────────────────────────────────────────────────
@@ -108,7 +170,8 @@ class CreateDocumentNode(BaseNode):
         filepath = OUTPUT_DIR / filename
 
         title = params.get("title", "AI Generated Document")
-        content = _resolve_content(params, context)
+        raw_data = _resolve_data(params, context, "content", ["content_ref", "body_ref"])
+        content = _parse_to_str(raw_data)
 
         doc = Document()
 
@@ -155,12 +218,9 @@ class CreateSpreadsheetNode(BaseNode):
         ws = wb.active
         ws.title = sheet_name
 
-        # Accept data as list of lists, or pull from context
-        data = params.get("data")
-        if not data:
-            content = _resolve_content(params, context)
-            # Parse comma-separated lines as rows
-            data = [line.split(",") for line in content.strip().split("\n") if line.strip()]
+        # Resolve and parse data
+        raw_data = _resolve_data(params, context, "data", ["data_ref", "content_ref"])
+        data = _parse_to_list(raw_data)
 
         if isinstance(data, list):
             for row in data:
@@ -202,18 +262,20 @@ class CreatePresentationNode(BaseNode):
         slide.placeholders[1].text = params.get("subtitle", "Created by AI Workflow Builder")
 
         # Content slides
-        slides_data = params.get("slides")
-        if not slides_data:
-            # Auto-generate from content/context
-            content = _resolve_content(params, context)
-            chunks = [c.strip() for c in content.split("\n\n") if c.strip()]
-            slides_data = [{"heading": f"Slide {i+1}", "body": chunk}
-                           for i, chunk in enumerate(chunks[:10])]  # max 10 slides
+        raw_slides = _resolve_data(params, context, "slides", ["slides_ref", "content_ref", "data_ref"])
+        slides_data = _parse_to_list(raw_slides)
+
+        # If it's just a list of strings/blobs, convert to slide dicts
+        if slides_data and not isinstance(slides_data[0], dict):
+            slides_data = [{"heading": f"Slide {i+1}", "body": str(item)}
+                           for i, item in enumerate(slides_data)]
 
         for s in (slides_data or []):
+            if not isinstance(s, dict):
+                continue
             slide = prs.slides.add_slide(content_layout)
-            slide.shapes.title.text = s.get("heading", s.get("title", ""))
-            slide.placeholders[1].text = s.get("body", s.get("content", ""))
+            slide.shapes.title.text = str(s.get("heading", s.get("title", "")))
+            slide.placeholders[1].text = str(s.get("body", s.get("content", "")))
 
         prs.save(str(filepath))
         return str(filepath)
