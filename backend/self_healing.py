@@ -44,9 +44,16 @@ def _call_heal_llm(action: str, params: dict, error: str,
     api_key = os.getenv("MISTRAL_API_KEY", "")
     model_name = os.getenv("MODEL_NAME", "mistral-small")
 
-    if not api_key or api_key == "dummy_for_build":
-        logger.warning("No LLM API key configured — self-healing unavailable")
-        return None
+    # Check for Gemini override
+    if "gemini" in model_name.lower():
+        api_key = os.getenv("GEMINI_API_KEY", "")
+        full_model = model_name
+    else:
+        if not api_key or api_key == "dummy_for_build":
+            logger.warning("No LLM API key configured — self-healing unavailable")
+            return None
+        full_model = model_name if "/" in model_name else f"mistral/{model_name}"
+
 
     prompt = f"""You are a workflow self-healing assistant. A node in an automated workflow has failed.
 
@@ -71,7 +78,6 @@ Output ONLY the corrected params JSON:"""
         # Use LiteLLM (same as the rest of the project)
         from litellm import completion
 
-        full_model = model_name if "/" in model_name else f"mistral/{model_name}"
         response = completion(
             model=full_model,
             api_key=api_key,
@@ -79,6 +85,7 @@ Output ONLY the corrected params JSON:"""
             temperature=0.1,
             max_tokens=1024,
         )
+
 
         raw = response.choices[0].message.content.strip()
 

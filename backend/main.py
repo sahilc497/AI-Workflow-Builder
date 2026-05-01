@@ -76,7 +76,12 @@ app.add_middleware(
 @app.post("/create-workflow", response_model=WorkflowResponse)
 def create_workflow(req: WorkflowCreateRequest, db: Session = Depends(get_db)):
     # Pass db so crew_runner can query memory for similar past workflows
-    response_json = generate_workflow_from_prompt(req.prompt, db=db)
+    try:
+        response_json = generate_workflow_from_prompt(req.prompt, db=db)
+    except Exception as e:
+        logger.error(f"Workflow generation failed: {e}")
+        raise HTTPException(status_code=500, detail=f"LLM_GENERATION_FAILED: {str(e)}")
+
     if "error" in response_json:
         raise HTTPException(status_code=400, detail="Failed to parse workflow prompt into DAG format.")
         
@@ -88,6 +93,7 @@ def create_workflow(req: WorkflowCreateRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(wf)
     return wf
+
 
 @app.post("/execute/{workflow_id}", response_model=ExecutionResponse)
 def execute_workflow(workflow_id: str, background_tasks: BackgroundTasks, approved: bool = False, db: Session = Depends(get_db)):

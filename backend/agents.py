@@ -8,6 +8,11 @@ def get_llm():
     api_key = os.getenv("MISTRAL_API_KEY")
     model_name = os.getenv("MODEL_NAME", "mistral-small")
     
+    # Check if Gemini is requested
+    if "gemini" in model_name.lower():
+        api_key = os.getenv("GEMINI_API_KEY")
+        return LLM(model=model_name, api_key=api_key)
+
     if not api_key:
         api_key = "dummy_for_build"
     
@@ -15,6 +20,7 @@ def get_llm():
     full_model = model_name if "/" in model_name else f"mistral/{model_name}"
     
     return LLM(model=full_model, api_key=api_key)
+
 
 class WorkflowAgents:
     def __init__(self):

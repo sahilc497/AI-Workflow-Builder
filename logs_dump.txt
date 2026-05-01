@@ -1,0 +1,7 @@
+Execution ID: b6b909f8-bf7f-4ec4-8d7a-8e182dee5bda
+Status: COMPLETED
+--------------------------------------------------
+[2026-05-01 08:04:39.214683] INFO: Starting DAG execution
+[2026-05-01 08:04:39.214683] INFO: Workflow Explanation:
+Step 1: Directly send a WhatsApp message to the contact 'SWATI' with the message 'on kr' using the WHATSAPP_MESSAGE action.
+[2026-05-01 08:04:39.216905] INFO: PRE-EXEC: Node=whatsapp_message_node, Action=WHATSAPP_MESSAGE, Params={'contact': 'SWATI', 'message': 'on kr'}, ContextKeys=[]

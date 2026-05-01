@@ -14,14 +14,12 @@ def dump_logs():
         print(f"Dumping logs for Execution ID: {latest_exec.id}")
         logs = db.query(Log).filter(Log.execution_id == latest_exec.id).order_by(Log.timestamp).all()
         
-        with open("logs_dump.txt", "w") as f:
-            f.write(f"Execution ID: {latest_exec.id}\n")
-            f.write(f"Status: {latest_exec.status}\n")
-            f.write("-" * 50 + "\n")
-            for log in logs:
-                f.write(f"[{log.timestamp}] {log.level}: {log.message}\n")
-        
-        print("Logs dumped to logs_dump.txt")
+        print(f"Execution ID: {latest_exec.id}")
+        print(f"Status: {latest_exec.status}")
+        print("-" * 50)
+        for log in logs:
+            print(f"[{log.timestamp}] {log.level}: {log.message}")
+
     except Exception as e:
         print(f"Error: {e}")
     finally:

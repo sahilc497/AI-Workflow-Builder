@@ -534,13 +534,40 @@
             max-width: 800px;
             width: 90%;
             box-shadow: 30px 30px 0 #000;
+            position: relative;
         }
+
 
         .modal-title {
             font-size: 3.5rem;
             text-transform: uppercase;
             margin-bottom: 2rem;
         }
+
+        .close-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            width: auto !important;
+            padding: 1rem !important;
+            border: none !important;
+            background: transparent !important;
+            font-family: 'JetBrains Mono';
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #000;
+            font-weight: 700;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .close-modal:hover {
+            color: #666;
+            background: transparent !important;
+            transform: scale(1.1) !important;
+            box-shadow: none !important;
+        }
+
 
         /* Pre/Code */
         pre {
@@ -821,7 +848,10 @@
     <!-- ===== OVERLAYS ===== -->
     <div class="modal-overlay" id="risk-modal">
         <div class="modal-content">
+            <button onclick="closeRiskModal()" class="close-modal">[X]</button>
             <h2 class="modal-title">Protocol Risk</h2>
+
+
             <div class="editorial-rule"></div>
             <p style="font-size: 1.5rem; font-style: italic; margin-bottom: 4rem;">The following nodes require
                 architectural authorization.</p>
@@ -955,12 +985,18 @@
                     renderExplanation(data.explanation);
                     setTimeout(() => renderGraph(data.dag_json), 100);
                     fetchWorkflows();
+                    populateTriggerWorkflowSelect();
+                } else {
+                    alert("ARCHITECTURAL_FAILURE: " + (data.detail || "UNKNOWN_ERROR"));
                 }
-            } catch (e) { } finally {
+            } catch (e) {
+                alert("NETWORK_PROTOCOL_ERROR: Connection refused or timeout.");
+            } finally {
                 btn.disabled = false;
                 text.style.display = 'block';
                 loader.style.display = 'none';
             }
+
         }
 
         async function previewWorkflow(id) {
@@ -1150,13 +1186,98 @@
         `).join('') : '<p style="text-align:center; padding:4rem; font-family:\'JetBrains Mono\';">NO_ACTIVE_SENTINELS</p>';
         }
 
+        function closeRiskModal() {
+            document.getElementById('risk-modal').classList.remove('active');
+        }
+
+        function confirmExecuteWorkflow() {
+            if (window.pendingExecutionId) {
+                doActualExecution(window.pendingExecutionId, true);
+            }
+        }
+
+        function updateTriggerConfigUI() {
+            const type = document.getElementById('trigger-type-select').value;
+            document.querySelectorAll('.trigger-config-area').forEach(el => el.style.display = 'none');
+            if (type) {
+                const area = document.getElementById(`trigger-config-${type}`);
+                if (area) area.style.display = 'block';
+            }
+        }
+
+        async function populateTriggerWorkflowSelect() {
+            try {
+                const res = await fetch(`${API_BASE}/workflows`);
+                const data = await res.json();
+                const select = document.getElementById('trigger-workflow-select');
+                if (!select) return;
+                select.innerHTML = '<option value="">SELECT_BLUEPRINT...</option>';
+                data.forEach(wf => {
+                    const opt = document.createElement('option');
+                    opt.value = wf.id;
+                    opt.textContent = `${wf.id.substring(0, 8)}: ${wf.prompt.substring(0, 30)}...`;
+                    select.appendChild(opt);
+                });
+            } catch (e) { }
+        }
+
+        async function createTrigger() {
+            const type = document.getElementById('trigger-type-select').value;
+            const workflowId = document.getElementById('trigger-workflow-select').value;
+            if (!type || !workflowId) return alert("Please select both a trigger type and a target workflow.");
+
+            const config = {};
+            if (type === 'filesystem') config.path = document.getElementById('fs-watch-path').value;
+            if (type === 'email') {
+                config.email = document.getElementById('email-address').value;
+                config.password = document.getElementById('email-password').value;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/triggers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ trigger_type: type, workflow_id: workflowId, config })
+                });
+                if (res.ok) {
+                    fetchTriggers();
+                    alert("Sentinel Activated.");
+                }
+            } catch (e) { }
+        }
+
+        async function deleteTrigger(id) {
+            if (!confirm("Terminate this sentinel protocol?")) return;
+            try {
+                await fetch(`${API_BASE}/triggers/${id}`, { method: 'DELETE' });
+                fetchTriggers();
+            } catch (e) { }
+        }
+
+        async function viewTriggerEvents(id) {
+            try {
+                const res = await fetch(`${API_BASE}/triggers/${id}/events`);
+                const data = await res.json();
+                const container = document.getElementById('trigger-events-container');
+                document.getElementById('trigger-event-log').style.display = 'block';
+                container.innerHTML = data.length ? data.map(e => `
+                    <div style="padding:1rem; border-bottom:1px solid #eee; font-family:'JetBrains Mono'; font-size:0.7rem;">
+                        [${new Date(e.timestamp + 'Z').toLocaleString()}] -> TRIGGERED_EXECUTION: ${e.execution_id.substring(0, 8).toUpperCase()}
+                    </div>
+                `).join('') : '<p style="padding:2rem; font-family:\'JetBrains Mono\'; font-size:0.7rem;">NO_EVENTS_LOGGED</p>';
+                container.scrollIntoView({ behavior: 'smooth' });
+            } catch (e) { }
+        }
+
         // Init Sequence
         fetchMetrics();
         fetchWorkflows();
         loadAllowedApps();
         fetchTriggers();
+        populateTriggerWorkflowSelect();
         setInterval(fetchMetrics, 10000);
     </script>
+
 </body>
 
 </html>
