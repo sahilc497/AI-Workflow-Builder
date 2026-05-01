@@ -88,15 +88,29 @@ pip install -r requirements.txt
 
 ## Running the Application
 
-### Start the Application
+The backend is now configured to serve the frontend static files directly. You only need to start the backend server to access the full application.
 
-```bash
-uvicorn backend.main:app --reload
+### Quick Start (Windows PowerShell)
+
+Run this single command to start the server and automatically open the UI:
+
+```powershell
+Start-Process python -ArgumentList "-m uvicorn backend.main:app --reload"; Start-Sleep -s 3; start http://127.0.0.1:8000
 ```
+
+### Manual Execution
+
+1. **Start the Backend:**
+   ```bash
+   uvicorn backend.main:app --reload
+   ```
+
+2. **Access the UI:**
+   Open your browser and navigate to `http://127.0.0.1:8000`.
 
 ### Debug Execution
 
-For debugging and testing:
+For dumping intelligence logs to a text file:
 
 ```bash
 python debug_execution.py

@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Request, responses
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import os
 import logging
 from dotenv import load_dotenv, set_key
@@ -414,3 +416,11 @@ async def receive_webhook(trigger_id: str, request: Request, db: Session = Depen
         return {"status": "fired", "execution_id": exec_id, "trigger_id": trigger_id}
     else:
         raise HTTPException(status_code=500, detail="Failed to fire trigger")
+
+
+# ── Serve Frontend ──────────────────────────────────────────────────────────
+
+# Mount the frontend directory for static assets
+# We do this at the end to avoid shadowing API routes
+if os.path.exists("frontend"):
+    app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
